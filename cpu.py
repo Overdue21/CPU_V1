@@ -407,12 +407,36 @@ def decode(instruction):
 
     #Group Three
     elif(cc == 0b00):
+        
+        
         #BIT
         if(aaa == 0b001):
             operation = BIT
             operand = 'memory'
+        #JMP
         elif(aaa == 0b010):
             operation = JMP
+            operand = 'absolute'
+        #JMP(abs)
+        elif(aaa == 0b011):
+            operation = JMPI
+            operand = 'absolute'
+        #STY
+        elif(aaa == 0b100):
+            operation = STORE
+            operand = 'regY'
+        #LDY
+        elif(aaa == 0b101):
+            operation = LOAD
+            operand = 'regY'
+        #CPY
+        elif(aaa == 0b110):
+            operation = CMP
+            operand = 'regY'
+        #CPX
+        elif(aaa == 0b111):
+            operation = CMP
+            operand = 'regX'
 
     else:
         raise Exception('Illegal Instruction')
@@ -432,6 +456,10 @@ def twosCompliment(in1):
 #return 16 bit combination of high byte(in1) and low byte(in2)
 #should be caught by branch predictor, so PC doesn't need to be set
 def JMP(in1, in2):
+    return (in1 << 8) + in2
+
+#implementation is the same as JMP, seperate OP
+def JMPI(in1, in2):
     return (in1 << 8) + in2
 
 #in1 = regA, in2 = mem
