@@ -313,11 +313,11 @@ def decode(instruction):
             operation = AND 
             operand = 'regA'
         #EOR
-        elif(aaa = 0b010):
+        elif(aaa == 0b010):
             operation = EOR
             operand = 'regA'
         #ADC
-        elif(aaa = 0b011):
+        elif(aaa == 0b011):
             operation = ADC
             operand = 'regA'
         #STA
@@ -353,7 +353,7 @@ def decode(instruction):
         elif(bbb == 0b011):
             addressing = 'absolute'
         #zero page, X
-        elif(bbb = 0b101):
+        elif(bbb == 0b101):
             addressing = 'zeroPageX'
         #absolute, X
         elif(bbb == 0b111):
@@ -382,7 +382,7 @@ def decode(instruction):
             else:
                 operand = 'memory'
         #ROR
-        elif(aaa = 0b011):
+        elif(aaa == 0b011):
             operation = ROTATER
             if(addressing == 'accumulator'):
                 operand = 'regA'
@@ -407,7 +407,21 @@ def decode(instruction):
 
     #Group Three
     elif(cc == 0b00):
-        
+        ##immediate
+        if(bbb == 0b000):
+            addressing = 'immediate'
+        #zero page
+        elif(bbb == 0b001):
+            addressing = 'zeroPage'
+        #absolute
+        elif(bbb == 0b011):
+            addressing = 'absolute'
+        #zero page,X
+        elif(bbb == 0b101):
+            addressing = 'zeroPageX'
+        #absolute,X
+        elif(bbb == 0b111):
+            addressing = 'absoluteX'
         
         #BIT
         if(aaa == 0b001):
@@ -437,6 +451,11 @@ def decode(instruction):
         elif(aaa == 0b111):
             operation = CMP
             operand = 'regX'
+
+    #conditional branches
+    elif((instruction & 0b0001_1111) == 0b0001_0000):
+        xx = instruction >> 6
+        y = (instruction & 0b0010_0000) >> 5
 
     else:
         raise Exception('Illegal Instruction')
