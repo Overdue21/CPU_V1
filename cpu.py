@@ -14,7 +14,7 @@ regStack = 0x00
 #regAddress = 0x0000
 regPC = 0x0000
 
-import decode
+#import decode
 
 memory = []
 iCache = [] #256 x 32
@@ -91,6 +91,9 @@ def checkDataHazard(data, stage):
 
 def effectiveAddress(mode):
     print()
+
+def isBranch(instruction):
+    return((instruction[0] & 0b0001_1111) == 0b0001_0000)
 
 
 def pipeFetch():
@@ -457,7 +460,23 @@ def decode(instruction):
         xx = instruction >> 6
         y = (instruction & 0b0010_0000) >> 5
 
-    else:
+        addressing = 'relative'
+        operation = BRANCH
+
+        #operand = FlagReg index
+        #This is sketchy 
+        if(xx == 0b00):
+            operand = NEGATIVE
+        elif(xx == 0b01):
+            operand = OVERFLOW
+        elif(xx == 0b10):
+            operand = CARRY
+        elif(xx == 0b11):
+            operand = ZERO
+
+
+
+    if(operation == None):
         raise Exception('Illegal Instruction')
     
     decoded['operation'] = operation
@@ -471,6 +490,12 @@ def twosCompliment(in1):
     if(in1 >> 7):
         out = in1 - 0b1_0000_0000
     return out
+
+#in1 = flag value
+#in2 = bit to compare
+#true = taken
+def BRANCH(in1, in2):
+    return in1 == in2
 
 #return 16 bit combination of high byte(in1) and low byte(in2)
 #should be caught by branch predictor, so PC doesn't need to be set
