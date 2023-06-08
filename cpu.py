@@ -271,6 +271,7 @@ def decode(instruction):
     #decoded dict keys
         #OP = function to excecute
         #addressingMode = 
+    instruction = instruction[0]
     operation = NOP
     operand = ''
     addressing = ''
@@ -474,9 +475,11 @@ def decode(instruction):
         elif(xx == 0b11):
             operand = ZERO
 
+    #interrupt and subroutine
+    if(instruction):
+        
 
-
-    if(operation == None):
+    if(operand == ''):
         raise Exception('Illegal Instruction')
     
     decoded['operation'] = operation
