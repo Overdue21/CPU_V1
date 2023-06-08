@@ -15,6 +15,7 @@ regStack = 0x00
 regPC = 0x0000
 
 #import decode
+#
 
 memory = []
 iCache = [] #256 x 32
@@ -264,7 +265,7 @@ def cycle():
 
 
 
-
+#
 
 
 def decode(instruction):
